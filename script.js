@@ -5,13 +5,19 @@ form.addEventListener('submit', function(e) {
   e.preventDefault();
 
   const data = {
+    id: form.id.value,
     nombre: form.nombre.value,
+    edad: form.edad.value,
+    curso: form.curso.value,
+    genero: form.genero.value,
+    convive: form.convive.value,
+    internet: form.internet.value,
     emocion: form.emocion.value,
     ganas: form.ganas.value,
-    acompanado: form.acompanado.value
+    acompanado: form.acompanado.value,
+    observaciones: form.observaciones.value
   };
 
-  // 👉 Pega aquí tu URL del Web App
   fetch("https://script.google.com/macros/s/AKfycbwMcYj9tQvzNZ5DUBd8-9mzyB-cD0kxUeTv4uuXu0GwVkwTId__cNEBCOpFSNpFrq5fAQ/exec", {
     method: "POST",
     mode: "no-cors",
@@ -22,7 +28,6 @@ form.addEventListener('submit', function(e) {
   });
 
   let alerta = false;
-
   if (data.emocion === 'triste' || data.ganas === 'si' || data.acompanado === 'no') {
     alerta = true;
   }
