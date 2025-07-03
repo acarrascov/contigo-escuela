@@ -18,7 +18,7 @@ form.addEventListener('submit', function(e) {
   };
 
   // 👉 Pega aquí la URL de tu Web App publicado
-  fetch("https://script.google.com/macros/s/AKfycbwMcYj9tQvzNZ5DUBd8-9mzyB-cD0kxUeTv4uuXu0GwVkwTId__cNEBCOpFSNpFrq5fAQ/exec", {
+  fetch("https://script.google.com/macros/s/AKfycbwFoiGNhYGTIgmBgy1E48KqSk_pBZtcps0dTq37nHJ84FixwIPthLefddnX-tx-uGOf/exec", {
     method: "POST",
     mode: "no-cors",
     headers: {
