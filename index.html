@@ -1,0 +1,48 @@
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contigo Escuela</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Contigo Escuela</h1>
+    <p><strong>Encuesta de bienestar estudiantil</strong></p>
+
+    <form id="surveyForm">
+      <label for="nombre">Nombre del estudiante:</label>
+      <input type="text" id="nombre" name="nombre" required>
+
+      <label for="emocion">¿Cómo te sentiste esta semana en el colegio?</label>
+      <select id="emocion" name="emocion" required>
+        <option value="">Selecciona una opción</option>
+        <option value="feliz">🙂 Bien</option>
+        <option value="neutral">😐 Más o menos</option>
+        <option value="triste">😞 Mal</option>
+      </select>
+
+      <label for="ganas">¿Has tenido ganas de faltar al colegio?</label>
+      <select id="ganas" name="ganas" required>
+        <option value="">Selecciona una opción</option>
+        <option value="no">No</option>
+        <option value="a_veces">A veces</option>
+        <option value="si">Sí</option>
+      </select>
+
+      <label for="acompanado">¿Te sientes acompañado/a?</label>
+      <select id="acompanado" name="acompanado" required>
+        <option value="">Selecciona una opción</option>
+        <option value="si">Sí</option>
+        <option value="no">No</option>
+      </select>
+
+      <button type="submit">Enviar</button>
+    </form>
+
+    <div id="resultado" style="margin-top:20px;"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
