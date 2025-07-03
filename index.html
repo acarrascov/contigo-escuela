@@ -1,20 +1,23 @@
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contigo Escuela</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="icono.png">
+  <link href="https://fonts.googleapis.com/css2?family=Comic+Neue&display=swap" rel="stylesheet">
 </head>
 <body>
   <div class="container">
-    <h1>Contigo Escuela</h1>
-    <p><strong>Encuesta de bienestar estudiantil</strong></p>
+    <h1>🎒 Contigo Escuela</h1>
+    <p><strong>💬 Encuesta de bienestar estudiantil</strong></p>
 
     <form id="surveyForm">
-      <label for="nombre">Nombre del estudiante:</label>
+      <label for="nombre">👤 Nombre del estudiante:</label>
       <input type="text" id="nombre" name="nombre" required>
 
-      <label for="emocion">¿Cómo te sentiste esta semana en el colegio?</label>
+      <label for="emocion">😊 ¿Cómo te sentiste esta semana en el colegio?</label>
       <select id="emocion" name="emocion" required>
         <option value="">Selecciona una opción</option>
         <option value="feliz">🙂 Bien</option>
@@ -22,7 +25,7 @@
         <option value="triste">😞 Mal</option>
       </select>
 
-      <label for="ganas">¿Has tenido ganas de faltar al colegio?</label>
+      <label for="ganas">📅 ¿Has tenido ganas de faltar al colegio?</label>
       <select id="ganas" name="ganas" required>
         <option value="">Selecciona una opción</option>
         <option value="no">No</option>
@@ -30,14 +33,14 @@
         <option value="si">Sí</option>
       </select>
 
-      <label for="acompanado">¿Te sientes acompañado/a?</label>
+      <label for="acompanado">🧸 ¿Te sientes acompañado/a?</label>
       <select id="acompanado" name="acompanado" required>
         <option value="">Selecciona una opción</option>
         <option value="si">Sí</option>
         <option value="no">No</option>
       </select>
 
-      <button type="submit">Enviar</button>
+      <button type="submit">🎈 Enviar</button>
     </form>
 
     <div id="resultado" style="margin-top:20px;"></div>
