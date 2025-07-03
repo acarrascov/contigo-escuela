@@ -28,6 +28,7 @@ form.addEventListener('submit', function(e) {
   });
 
   let alerta = false;
+
   if (data.emocion === 'triste' || data.ganas === 'si' || data.acompanado === 'no') {
     alerta = true;
   }
