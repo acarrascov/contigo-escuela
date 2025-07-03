@@ -20,7 +20,6 @@ form.addEventListener('submit', function(e) {
   // 👉 Pega aquí la URL de tu Web App publicado
   fetch("https://script.google.com/macros/s/AKfycbwrv4oTXQQv37cf_1PmVyY_oy6vg8BDn0miQgWU6w9a52shSqMEb60I85hRhO_OBi6_JQ/exec", {
     method: "POST",
-    mode: "no-cors",
     headers: {
       "Content-Type": "application/json"
     },
