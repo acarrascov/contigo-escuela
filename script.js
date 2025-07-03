@@ -4,13 +4,26 @@ const resultado = document.getElementById('resultado');
 form.addEventListener('submit', function(e) {
   e.preventDefault();
 
-  const emocion = form.emocion.value;
-  const ganas = form.ganas.value;
-  const acompanado = form.acompanado.value;
+  const data = {
+    nombre: form.nombre.value,
+    emocion: form.emocion.value,
+    ganas: form.ganas.value,
+    acompanado: form.acompanado.value
+  };
+
+  // 👉 Pega aquí tu URL del Web App
+  fetch("https://script.google.com/macros/s/AKfycbwMcYj9tQvzNZ5DUBd8-9mzyB-cD0kxUeTv4uuXu0GwVkwTId__cNEBCOpFSNpFrq5fAQ/exec", {
+    method: "POST",
+    mode: "no-cors",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(data)
+  });
 
   let alerta = false;
 
-  if (emocion === 'triste' || ganas === 'si' || acompanado === 'no') {
+  if (data.emocion === 'triste' || data.ganas === 'si' || data.acompanado === 'no') {
     alerta = true;
   }
 
