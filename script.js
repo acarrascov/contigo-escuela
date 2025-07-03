@@ -5,7 +5,6 @@ form.addEventListener('submit', function(e) {
   e.preventDefault();
 
   const data = {
-    id: form.id.value,
     nombre: form.nombre.value,
     edad: form.edad.value,
     curso: form.curso.value,
@@ -18,6 +17,7 @@ form.addEventListener('submit', function(e) {
     observaciones: form.observaciones.value
   };
 
+  // 👉 Pega aquí la URL de tu Web App publicado
   fetch("https://script.google.com/macros/s/AKfycbwMcYj9tQvzNZ5DUBd8-9mzyB-cD0kxUeTv4uuXu0GwVkwTId__cNEBCOpFSNpFrq5fAQ/exec", {
     method: "POST",
     mode: "no-cors",
