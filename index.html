@@ -7,6 +7,27 @@
   <link rel="stylesheet" href="style.css" />
   <link rel="manifest" href="manifest.json" />
   <link rel="icon" href="icono.png" type="image/png">
+  <!-- Firebase App (core SDK) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
+
+<!-- Firebase Firestore -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js"></script>
+
+<!-- Tu configuración de Firebase -->
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyA2QyCQse0v7pHpU9InvGNbzuqsQuHAMHc",
+    authDomain: "contigo-escuela.firebaseapp.com",
+    projectId: "contigo-escuela",
+    storageBucket: "contigo-escuela.firebasestorage.app",
+    messagingSenderId: "76123958946",
+    appId: "1:76123958946:web:98bac656997a4ee23fb1fb",
+    measurementId: "G-LW7CCJW7F8"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+</script>
 </head>
 <body class="bg-blue-50 font-sans">
   <div class="max-w-xl mx-auto mt-10 bg-white shadow-md rounded-2xl p-6">
@@ -106,64 +127,67 @@
     const verRespuestasBtn = document.getElementById('verRespuestas');
     const tabla = document.querySelector('#tabla');
 
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      const data = {
-        nombre: form.nombre.value,
-        edad: form.edad.value,
-        curso: form.curso.value,
-        emocion: form.emocion.value,
-        ganas: form.ganas.value,
-        acompanado: form.acompanado.value,
-      };
+    form.addEventListener('submit', async function (e) {
+  e.preventDefault();
+  const data = {
+    nombre: form.nombre.value,
+    edad: form.edad.value,
+    curso: form.curso.value,
+    emocion: form.emocion.value,
+    ganas: form.ganas.value,
+    acompanado: form.acompanado.value,
+    timestamp: new Date()
+  };
 
-      let respuestas = JSON.parse(localStorage.getItem("respuestasEstudiantes")) || [];
-      respuestas.push(data);
-      localStorage.setItem("respuestasEstudiantes", JSON.stringify(respuestas));
+  try {
+    await db.collection("respuestasEstudiantes").add(data);
 
-      let necesitaApoyo = data.emocion === 'triste' || data.ganas === 'si' || data.acompanado === 'no';
+    let necesitaApoyo = data.emocion === 'triste' || data.ganas === 'si' || data.acompanado === 'no';
 
-      alerta.innerHTML = necesitaApoyo
-        ? `<p class="text-red-600">🔔 Atención: El estudiante podría necesitar apoyo emocional.</p>
-           <p class="text-green-600 mt-2">✅ Tu formulario ha sido enviado con éxito.</p>`
-        : `<p class="text-green-600">✅ Gracias por responder. Tu formulario ha sido enviado.</p>`;
+    alerta.innerHTML = necesitaApoyo
+      ? `<p class="text-red-600">🔔 Atención: El estudiante podría necesitar apoyo emocional.</p>
+         <p class="text-green-600 mt-2">✅ Tu formulario ha sido enviado con éxito.</p>`
+      : `<p class="text-green-600">✅ Gracias por responder. Tu formulario ha sido enviado.</p>`;
 
-      form.reset();
-    });
+    form.reset();
+  } catch (error) {
+    alerta.innerHTML = `<p class="text-red-600">❌ Error al enviar el formulario.</p>`;
+    console.error("Error guardando en Firestore:", error);
+  }
+});
 
     adminBtn.addEventListener('click', () => {
       adminPanel.classList.remove('hidden');
     });
 
-    verRespuestasBtn.addEventListener('click', () => {
-      const clave = document.getElementById('adminClave').value;
-      if (clave !== 'Inacap2025.') {
-        alert("Clave incorrecta");
-        return;
-      }
-
-      const datos = JSON.parse(localStorage.getItem("respuestasEstudiantes")) || [];
-      tabla.innerHTML = '';
-      datos.forEach(dato => {
-        const fila = `<tr>
-          <td class="border p-1">${dato.nombre}</td>
-          <td class="border p-1">${dato.edad}</td>
-          <td class="border p-1">${dato.curso}</td>
-          <td class="border p-1">${dato.emocion}</td>
-          <td class="border p-1">${dato.ganas}</td>
-          <td class="border p-1">${dato.acompanado}</td>
-        </tr>`;
-        tabla.innerHTML += fila;
-      });
-
-      document.getElementById('tablaRespuestas').classList.remove('hidden');
-    });
-
-    if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js')
-      .then(() => console.log('✅ Service Worker registrado'))
-      .catch(err => console.error('❌ Error al registrar SW', err));
+   verRespuestasBtn.addEventListener('click', async () => {
+  const clave = document.getElementById('adminClave').value;
+  if (clave !== 'Inacap2025.') {
+    alert("Clave incorrecta");
+    return;
   }
+
+  tabla.innerHTML = '';
+  try {
+    const snapshot = await db.collection("respuestasEstudiantes").orderBy("timestamp", "desc").get();
+    snapshot.forEach(doc => {
+      const dato = doc.data();
+      const fila = `<tr>
+        <td class="border p-1">${dato.nombre}</td>
+        <td class="border p-1">${dato.edad}</td>
+        <td class="border p-1">${dato.curso}</td>
+        <td class="border p-1">${dato.emocion}</td>
+        <td class="border p-1">${dato.ganas}</td>
+        <td class="border p-1">${dato.acompanado}</td>
+      </tr>`;
+      tabla.innerHTML += fila;
+    });
+    document.getElementById('tablaRespuestas').classList.remove('hidden');
+  } catch (error) {
+    alert("❌ Error al obtener respuestas desde Firebase.");
+    console.error("Firestore error:", error);
+  }
+});
   </script>
 </body>
 </html>
