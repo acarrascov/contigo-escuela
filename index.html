@@ -7,23 +7,30 @@
   <link rel="stylesheet" href="style.css" />
 
   <!-- Firebase compat -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <!-- Firebase App y Firestore (compatibilidad para navegador sin módulos) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyA2QyCQse0v7pHpU9InvGNbzuqsQuHAMHc",
-      authDomain: "contigo-escuela.firebaseapp.com",
-      projectId: "contigo-escuela",
-      storageBucket: "contigo-escuela.firebasestorage.app",
-      messagingSenderId: "76123958946",
-      appId: "1:76123958946:web:98bac656997a4ee23fb1fb",
-      measurementId: "G-LW7CCJW7F8"
-    };
+<script>
+  // Tu configuración de Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyA2QyCQse0v7pHpU9InvGNbzuqsQuHAMHc",
+    authDomain: "contigo-escuela.firebaseapp.com",
+    projectId: "contigo-escuela",
+    storageBucket: "contigo-escuela.firebasestorage.app",
+    messagingSenderId: "76123958946",
+    appId: "1:76123958946:web:98bac656997a4ee23fb1fb",
+    measurementId: "G-LW7CCJW7F8"
+  };
 
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-  </script>
+  // Inicializa Firebase y Firestore
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+
+  // Esto lo agrego para probar que sí está funcionando:
+  console.log("✅ Firebase cargado:", firebase);
+  console.log("✅ Firestore listo:", db);
+</script>
 </head>
 <body class="bg-blue-50 font-sans">
   <div class="max-w-xl mx-auto mt-10 bg-white shadow-md rounded-2xl p-6">
