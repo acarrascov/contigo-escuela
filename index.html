@@ -63,10 +63,36 @@
 
     <p id="mensaje" class="text-center mt-4 font-semibold"></p>
 
-    <div class="mt-6 text-center">
-      <a href="padres.html" class="block bg-gray-700 hover:bg-gray-800 text-white py-2 rounded">
+    <div class="mt-6">
+      <button id="adminBtn" class="w-full bg-gray-700 hover:bg-gray-800 text-white py-2 rounded">
         🔑 Acceso administrador
-      </a>
+      </button>
+    </div>
+
+    <div id="adminPanel" class="hidden mt-4">
+      <input type="password" id="claveAdmin" placeholder="Ingrese clave" class="w-full p-2 border rounded mb-2" />
+      <button id="verRespuestas" class="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded">
+        📋 Ver respuestas
+      </button>
+
+      <div id="tablaPanel" class="hidden mt-4">
+        <h2 class="font-bold text-center text-blue-700 mb-2">📊 Respuestas registradas</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm border border-gray-300">
+            <thead class="bg-blue-100">
+              <tr>
+                <th class="border p-1">Nombre</th>
+                <th class="border p-1">Edad</th>
+                <th class="border p-1">Curso</th>
+                <th class="border p-1">Estado</th>
+                <th class="border p-1">Faltar</th>
+                <th class="border p-1">Acompañado/a</th>
+              </tr>
+            </thead>
+            <tbody id="tablaRespuestas" class="text-center"></tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -88,6 +114,7 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
+    // Envío de formulario
     document.getElementById("formulario").addEventListener("submit", async (e) => {
       e.preventDefault();
 
@@ -119,6 +146,43 @@
         console.error("Error guardando en Firestore:", error);
         mensaje.textContent = "❌ Error al enviar el formulario.";
         mensaje.className = "text-red-600 text-center mt-4 font-semibold";
+      }
+    });
+
+    // Mostrar panel admin
+    document.getElementById("adminBtn").addEventListener("click", () => {
+      document.getElementById("adminPanel").classList.remove("hidden");
+    });
+
+    // Ver respuestas
+    document.getElementById("verRespuestas").addEventListener("click", async () => {
+      const clave = document.getElementById("claveAdmin").value;
+      if (clave !== "Inacap2025.") {
+        alert("Clave incorrecta");
+        return;
+      }
+
+      const tabla = document.getElementById("tablaRespuestas");
+      tabla.innerHTML = "";
+
+      try {
+        const snapshot = await db.collection("respuestasEstudiantes").orderBy("fecha", "desc").get();
+        snapshot.forEach(doc => {
+          const d = doc.data();
+          tabla.innerHTML += `
+            <tr>
+              <td class="border p-1">${d.nombre}</td>
+              <td class="border p-1">${d.edad}</td>
+              <td class="border p-1">${d.curso}</td>
+              <td class="border p-1">${d.estado}</td>
+              <td class="border p-1">${d.asistencia}</td>
+              <td class="border p-1">${d.acompanamiento}</td>
+            </tr>`;
+        });
+        document.getElementById("tablaPanel").classList.remove("hidden");
+      } catch (error) {
+        console.error("Error obteniendo datos:", error);
+        alert("❌ Error al obtener datos.");
       }
     });
   </script>
