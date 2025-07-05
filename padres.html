@@ -5,6 +5,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Contigo Escuela - Padres</title>
   <link rel="stylesheet" href="style.css" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icono.png" type="image/png">
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyA2QyCQse0v7pHpU9InvGNbzuqsQuHAMHc",
+      authDomain: "contigo-escuela.firebaseapp.com",
+      projectId: "contigo-escuela",
+      storageBucket: "contigo-escuela.firebasestorage.app",
+      messagingSenderId: "76123958946",
+      appId: "1:76123958946:web:98bac656997a4ee23fb1fb",
+      measurementId: "G-LW7CCJW7F8"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+  </script>
 </head>
 <body class="bg-yellow-50 font-sans">
   <div class="max-w-xl mx-auto mt-10 bg-white shadow-md rounded-2xl p-6">
@@ -16,16 +37,14 @@
         <label class="block font-semibold mb-1">👤 Nombre del apoderado:</label>
         <input type="text" name="nombre" required class="w-full p-2 border rounded-md"/>
       </div>
-        <div>
-    <label class="block font-semibold mb-1">👧 Nombre del hijo o hija:</label>
-    <input type="text" name="hijo" required class="w-full p-2 border rounded-md"/>
-  </div>
-
-  <div>
-    <label class="block font-semibold mb-1">📚 Curso del estudiante:</label>
-    <input type="text" name="curso" required class="w-full p-2 border rounded-md"/>
-  </div>
-
+      <div>
+        <label class="block font-semibold mb-1">👧 Nombre del hijo o hija:</label>
+        <input type="text" name="hijo" required class="w-full p-2 border rounded-md"/>
+      </div>
+      <div>
+        <label class="block font-semibold mb-1">📚 Curso del estudiante:</label>
+        <input type="text" name="curso" required class="w-full p-2 border rounded-md"/>
+      </div>
       <div>
         <label class="block font-semibold mb-1">📞 ¿Podemos contactarte si es necesario?</label>
         <select name="contacto" required class="w-full p-2 border rounded-md">
@@ -34,7 +53,6 @@
           <option value="no">No</option>
         </select>
       </div>
-
       <div>
         <label class="block font-semibold mb-1">📆 ¿Te gustaría participar en actividades escolares?</label>
         <select name="participa" required class="w-full p-2 border rounded-md">
@@ -44,7 +62,6 @@
           <option value="depende">Depende de la actividad</option>
         </select>
       </div>
-
       <div>
         <label class="block font-semibold mb-1">📝 Comentarios u observaciones:</label>
         <textarea name="comentario" rows="3" class="w-full p-2 border rounded-md"></textarea>
@@ -96,9 +113,9 @@
     const adminBtn = document.getElementById('adminBtn');
     const adminPanel = document.getElementById('adminPanel');
     const verRespuestasBtn = document.getElementById('verRespuestas');
-    const tabla = document.querySelector('#tabla');
+    const tabla = document.getElementById('tabla');
 
-    form.addEventListener('submit', function (e) {
+    form.addEventListener('submit', async function (e) {
       e.preventDefault();
       const data = {
         nombre: form.nombre.value,
@@ -106,44 +123,59 @@
         curso: form.curso.value,
         contacto: form.contacto.value,
         participa: form.participa.value,
-        comentario: form.comentario.value
+        comentario: form.comentario.value,
+        timestamp: new Date()
       };
 
-      let respuestas = JSON.parse(localStorage.getItem("respuestasPadres")) || [];
-      respuestas.push(data);
-      localStorage.setItem("respuestasPadres", JSON.stringify(respuestas));
-
-      alerta.innerHTML = `<p class="text-green-600">✅ ¡Gracias por participar!</p>`;
-      form.reset();
+      try {
+        await db.collection("respuestasPadres").add(data);
+        alerta.innerHTML = `<p class="text-green-600">✅ ¡Gracias por participar!</p>`;
+        form.reset();
+      } catch (error) {
+        alerta.innerHTML = `<p class="text-red-600">❌ Error al enviar. Intenta nuevamente.</p>`;
+        console.error("Firestore error:", error);
+      }
     });
 
     adminBtn.addEventListener('click', () => {
       adminPanel.classList.remove('hidden');
     });
 
-    verRespuestasBtn.addEventListener('click', () => {
+    verRespuestasBtn.addEventListener('click', async () => {
       const clave = document.getElementById('adminClave').value;
       if (clave !== 'Inacap2025.') {
         alert("Clave incorrecta");
         return;
       }
 
-      const datos = JSON.parse(localStorage.getItem("respuestasPadres")) || [];
       tabla.innerHTML = '';
-      datos.forEach(dato => {
-        const fila = `<tr>
+      try {
+        const snapshot = await db.collection("respuestasPadres").orderBy("timestamp", "desc").get();
+        snapshot.forEach(doc => {
+          const dato = doc.data();
+          const fila = `<tr>
             <td class="border p-1">${dato.nombre}</td>
             <td class="border p-1">${dato.hijo}</td>
             <td class="border p-1">${dato.curso}</td>
             <td class="border p-1">${dato.contacto}</td>
             <td class="border p-1">${dato.participa}</td>
             <td class="border p-1">${dato.comentario}</td>
-        </tr>`;
-        tabla.innerHTML += fila;
-      });
+          </tr>`;
+          tabla.innerHTML += fila;
+        });
 
-      document.getElementById('tablaRespuestas').classList.remove('hidden');
+        document.getElementById('tablaRespuestas').classList.remove('hidden');
+      } catch (error) {
+        alert("❌ Error al obtener respuestas.");
+        console.error("Firestore error:", error);
+      }
     });
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js')
+        .then(() => console.log('✅ Service Worker registrado'))
+        .catch(err => console.error('❌ Error al registrar SW', err));
+    }
   </script>
 </body>
 </html>
