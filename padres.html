@@ -3,14 +3,93 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Contigo Escuela - Padres</title>
-  <link rel="stylesheet" href="style.css" />
-  <link rel="manifest" href="manifest.json" />
-  <link rel="icon" href="icono.png" type="image/png">
+  <title>Formulario Apoderados</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-yellow-50 flex items-center justify-center min-h-screen">
+  <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+    <h1 class="text-xl font-bold text-center text-yellow-700 mb-6">
+      👨‍👩‍👧‍👦 Formulario para padres y apoderados
+    </h1>
 
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js"></script>
+    <form id="formularioPadres" class="space-y-4">
+      <div>
+        <label class="font-bold">👤 Nombre del apoderado:</label>
+        <input type="text" name="apoderado" required class="w-full mt-1 border rounded p-2" />
+      </div>
+
+      <div>
+        <label class="font-bold">👧 Nombre del hijo o hija:</label>
+        <input type="text" name="hijo" required class="w-full mt-1 border rounded p-2" />
+      </div>
+
+      <div>
+        <label class="font-bold">📚 Curso del estudiante:</label>
+        <input type="text" name="curso" required class="w-full mt-1 border rounded p-2" />
+      </div>
+
+      <div>
+        <label class="font-bold">📞 ¿Podemos contactarte si es necesario?</label>
+        <select name="contacto" required class="w-full mt-1 border rounded p-2">
+          <option value="">Selecciona</option>
+          <option value="Sí">Sí</option>
+          <option value="No">No</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="font-bold">📆 ¿Te gustaría participar en actividades escolares?</label>
+        <select name="participa" required class="w-full mt-1 border rounded p-2">
+          <option value="">Selecciona</option>
+          <option value="Sí">Sí</option>
+          <option value="No">No</option>
+          <option value="Depende">Depende de la actividad</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="font-bold">📝 Comentarios u observaciones:</label>
+        <textarea name="comentario" rows="3" class="w-full mt-1 border rounded p-2"></textarea>
+      </div>
+
+      <button type="submit" class="w-full bg-yellow-600 hover:bg-yellow-700 text-white font-semibold py-2 rounded">
+        📩 Enviar
+      </button>
+    </form>
+
+    <p id="mensaje" class="text-center mt-4 font-semibold"></p>
+
+    <div class="mt-6 text-center">
+      <button id="mostrarAdmin" class="bg-gray-700 hover:bg-gray-800 text-white py-2 px-4 rounded">
+        🔑 Acceso administrador
+      </button>
+    </div>
+
+    <div id="adminPanel" class="mt-6 hidden">
+      <input type="password" id="claveAdmin" placeholder="Ingrese clave" class="w-full p-2 border rounded mb-2">
+      <button id="verRespuestas" class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700">Ver respuestas</button>
+
+      <div id="tablaRespuestas" class="mt-4 hidden overflow-auto text-sm">
+        <table class="w-full border text-center">
+          <thead class="bg-yellow-100">
+            <tr>
+              <th class="border p-1">Apoderado</th>
+              <th class="border p-1">Hijo/a</th>
+              <th class="border p-1">Curso</th>
+              <th class="border p-1">Contacto</th>
+              <th class="border p-1">Participa</th>
+              <th class="border p-1">Comentario</th>
+            </tr>
+          </thead>
+          <tbody id="tablaPadres"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 
   <script>
     const firebaseConfig = {
@@ -25,136 +104,55 @@
 
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
-  </script>
-</head>
-<body class="bg-yellow-50 font-sans">
-  <div class="max-w-xl mx-auto mt-10 bg-white shadow-md rounded-2xl p-6">
-    <h1 class="text-3xl font-bold text-center text-yellow-600 mb-4">👨‍👩‍👧‍👦 Contigo Escuela - Apoderados</h1>
-    <p class="text-center text-lg mb-6 font-medium">📋 Formulario para padres y apoderados</p>
 
-    <form id="parentForm" class="space-y-4">
-      <div>
-        <label class="block font-semibold mb-1">👤 Nombre del apoderado:</label>
-        <input type="text" name="nombre" required class="w-full p-2 border rounded-md"/>
-      </div>
-      <div>
-        <label class="block font-semibold mb-1">👧 Nombre del hijo o hija:</label>
-        <input type="text" name="hijo" required class="w-full p-2 border rounded-md"/>
-      </div>
-      <div>
-        <label class="block font-semibold mb-1">📚 Curso del estudiante:</label>
-        <input type="text" name="curso" required class="w-full p-2 border rounded-md"/>
-      </div>
-      <div>
-        <label class="block font-semibold mb-1">📞 ¿Podemos contactarte si es necesario?</label>
-        <select name="contacto" required class="w-full p-2 border rounded-md">
-          <option value="">Selecciona</option>
-          <option value="si">Sí</option>
-          <option value="no">No</option>
-        </select>
-      </div>
-      <div>
-        <label class="block font-semibold mb-1">📆 ¿Te gustaría participar en actividades escolares?</label>
-        <select name="participa" required class="w-full p-2 border rounded-md">
-          <option value="">Selecciona</option>
-          <option value="si">Sí</option>
-          <option value="no">No</option>
-          <option value="depende">Depende de la actividad</option>
-        </select>
-      </div>
-      <div>
-        <label class="block font-semibold mb-1">📝 Comentarios u observaciones:</label>
-        <textarea name="comentario" rows="3" class="w-full p-2 border rounded-md"></textarea>
-      </div>
+    const form = document.getElementById("formularioPadres");
+    const mensaje = document.getElementById("mensaje");
+    const adminPanel = document.getElementById("adminPanel");
+    const tabla = document.getElementById("tablaPadres");
 
-      <button type="submit" class="w-full bg-yellow-600 text-white p-2 rounded-md hover:bg-yellow-700 transition">
-        📨 Enviar
-      </button>
-    </form>
-
-    <div id="alerta" class="mt-4 text-center text-lg font-semibold"></div>
-
-    <hr class="my-6" />
-
-    <button id="adminBtn" class="w-full bg-gray-600 text-white p-2 rounded-md hover:bg-gray-700 transition">🔑 Acceso administrador</button>
-
-    <div id="adminPanel" class="mt-4 hidden">
-      <input type="password" id="adminClave" placeholder="Clave de acceso" class="w-full p-2 border rounded-md mb-2"/>
-      <button id="verRespuestas" class="w-full bg-green-600 text-white p-2 rounded-md hover:bg-green-700 transition">Ver respuestas</button>
-
-      <div id="tablaRespuestas" class="mt-4 hidden">
-        <h3 class="text-xl font-bold text-center mb-2">📋 Respuestas de Apoderados</h3>
-        <div class="overflow-x-auto">
-          <table class="w-full border border-gray-300 text-sm">
-            <thead class="bg-yellow-100">
-              <tr>
-                <th class="border p-1">Apoderado</th>
-                <th class="border p-1">Hijo/a</th>
-                <th class="border p-1">Curso</th>
-                <th class="border p-1">Contacto</th>
-                <th class="border p-1">Participación</th>
-                <th class="border p-1">Comentario</th>
-              </tr>
-            </thead>
-            <tbody id="tabla" class="text-center"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <div class="mt-6 text-center">
-      <a href="index.html" class="text-yellow-600 underline hover:text-yellow-800">🎒 Volver al panel de estudiantes</a>
-    </div>
-  </div>
-
-  <script>
-    const form = document.getElementById('parentForm');
-    const alerta = document.getElementById('alerta');
-    const adminBtn = document.getElementById('adminBtn');
-    const adminPanel = document.getElementById('adminPanel');
-    const verRespuestasBtn = document.getElementById('verRespuestas');
-    const tabla = document.getElementById('tabla');
-
-    form.addEventListener('submit', async function (e) {
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
+
       const data = {
-        nombre: form.nombre.value,
+        apoderado: form.apoderado.value,
         hijo: form.hijo.value,
         curso: form.curso.value,
         contacto: form.contacto.value,
         participa: form.participa.value,
         comentario: form.comentario.value,
-        timestamp: new Date()
+        fecha: new Date().toISOString()
       };
 
       try {
         await db.collection("respuestasPadres").add(data);
-        alerta.innerHTML = `<p class="text-green-600">✅ ¡Gracias por participar!</p>`;
+        mensaje.textContent = "✅ ¡Formulario enviado correctamente!";
+        mensaje.className = "text-green-600 text-center mt-4 font-semibold";
         form.reset();
       } catch (error) {
-        alerta.innerHTML = `<p class="text-red-600">❌ Error al enviar. Intenta nuevamente.</p>`;
-        console.error("Firestore error:", error);
+        console.error("Error:", error);
+        mensaje.textContent = "❌ Error al enviar el formulario.";
+        mensaje.className = "text-red-600 text-center mt-4 font-semibold";
       }
     });
 
-    adminBtn.addEventListener('click', () => {
-      adminPanel.classList.remove('hidden');
+    document.getElementById("mostrarAdmin").addEventListener("click", () => {
+      adminPanel.classList.remove("hidden");
     });
 
-    verRespuestasBtn.addEventListener('click', async () => {
-      const clave = document.getElementById('adminClave').value;
-      if (clave !== 'Inacap2025.') {
-        alert("Clave incorrecta");
+    document.getElementById("verRespuestas").addEventListener("click", async () => {
+      const clave = document.getElementById("claveAdmin").value;
+      if (clave !== "Inacap2025.") {
+        alert("❌ Clave incorrecta");
         return;
       }
 
-      tabla.innerHTML = '';
+      tabla.innerHTML = "";
       try {
-        const snapshot = await db.collection("respuestasPadres").orderBy("timestamp", "desc").get();
+        const snapshot = await db.collection("respuestasPadres").orderBy("fecha", "desc").get();
         snapshot.forEach(doc => {
           const dato = doc.data();
           const fila = `<tr>
-            <td class="border p-1">${dato.nombre}</td>
+            <td class="border p-1">${dato.apoderado}</td>
             <td class="border p-1">${dato.hijo}</td>
             <td class="border p-1">${dato.curso}</td>
             <td class="border p-1">${dato.contacto}</td>
@@ -163,19 +161,12 @@
           </tr>`;
           tabla.innerHTML += fila;
         });
-
-        document.getElementById('tablaRespuestas').classList.remove('hidden');
+        document.getElementById("tablaRespuestas").classList.remove("hidden");
       } catch (error) {
-        alert("❌ Error al obtener respuestas.");
-        console.error("Firestore error:", error);
+        alert("❌ Error al obtener datos.");
+        console.error(error);
       }
     });
-
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('service-worker.js')
-        .then(() => console.log('✅ Service Worker registrado'))
-        .catch(err => console.error('❌ Error al registrar SW', err));
-    }
   </script>
 </body>
 </html>
