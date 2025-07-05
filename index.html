@@ -5,85 +5,54 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Contigo Escuela - Estudiantes</title>
   <link rel="stylesheet" href="style.css" />
-
-  <!-- Firebase compat -->
-  <!-- Firebase App y Firestore (compatibilidad para navegador sin módulos) -->
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-
-<script>
-  // Tu configuración de Firebase
-  const firebaseConfig = {
-    apiKey: "AIzaSyA2QyCQse0v7pHpU9InvGNbzuqsQuHAMHc",
-    authDomain: "contigo-escuela.firebaseapp.com",
-    projectId: "contigo-escuela",
-    storageBucket: "contigo-escuela.firebasestorage.app",
-    messagingSenderId: "76123958946",
-    appId: "1:76123958946:web:98bac656997a4ee23fb1fb",
-    measurementId: "G-LW7CCJW7F8"
-  };
-
-  // Inicializa Firebase y Firestore
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
-
-  // Esto lo agrego para probar que sí está funcionando:
-  console.log("✅ Firebase cargado:", firebase);
-  console.log("✅ Firestore listo:", db);
-</script>
 </head>
 <body class="bg-blue-50 font-sans">
   <div class="max-w-xl mx-auto mt-10 bg-white shadow-md rounded-2xl p-6">
-    <h1 class="text-3xl font-bold text-center text-blue-600 mb-4">🎒 Contigo Escuela</h1>
-    <p class="text-center text-lg mb-6 font-medium">💬 Encuesta de bienestar estudiantil</p>
+    <h1 class="text-3xl font-bold text-center text-blue-600 mb-4">💬 Formulario para padres y apoderados</h1>
 
     <form id="studentForm" class="space-y-4">
       <div>
-        <label class="block font-semibold mb-1">👤 Nombre del estudiante:</label>
+        <label class="block font-semibold mb-1">👤 Nombre del apoderado:</label>
         <input type="text" name="nombre" required class="w-full p-2 border rounded-md"/>
       </div>
-
       <div>
-        <label class="block font-semibold mb-1">🎂 Edad:</label>
-        <input type="number" name="edad" min="6" max="14" required class="w-full p-2 border rounded-md"/>
+        <label class="block font-semibold mb-1">🎂 Nombre del hijo o hija:</label>
+        <input type="number" name="Edad" required class="w-full p-2 border rounded-md"/>
       </div>
-
       <div>
         <label class="block font-semibold mb-1">📚 Curso:</label>
-        <input type="text" name="curso" required class="w-full p-2 border rounded-md"/>
+        <input type="text" name="Curso del estudiante" required class="w-full p-2 border rounded-md"/>
       </div>
-
       <div>
         <label class="block font-semibold mb-1">😊 ¿Cómo te sentiste esta semana?</label>
         <select name="emocion" required class="w-full p-2 border rounded-md">
           <option value="">Selecciona</option>
-          <option value="feliz">🙂 Bien</option>
-          <option value="neutral">😐 Más o menos</option>
-          <option value="triste">😞 Mal</option>
+          <option value="bien">😊 Bien</option>
+          <option value="maso">😐 Más o menos</option>
+          <option value="mal">😔 Mal</option>
         </select>
       </div>
-
       <div>
-        <label class="block font-semibold mb-1">📅 ¿Has querido faltar al colegio?</label>
-        <select name="ganas" required class="w-full p-2 border rounded-md">
+        <label class="block font-semibold mb-1">📅 ¿Te gustaría participar en actividades escolares?</label>
+        <select name="falta" required class="w-full p-2 border rounded-md">
           <option value="">Selecciona</option>
           <option value="no">No</option>
-          <option value="a_veces">A veces</option>
-          <option value="si">Sí</option>
+          <option value="una">Una vez</option>
+          <option value="varias">Varias veces</option>
         </select>
       </div>
-
       <div>
-        <label class="block font-semibold mb-1">🧸 ¿Te sientes acompañado/a?</label>
+        <label class="block font-semibold mb-1">🧑‍🤝‍🧑 Comentarios u observaciones:</label>
         <select name="acompanado" required class="w-full p-2 border rounded-md">
           <option value="">Selecciona</option>
           <option value="si">Sí</option>
           <option value="no">No</option>
+          <option value="a_veces">A veces</option>
         </select>
       </div>
 
       <button type="submit" class="w-full bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700 transition">
-        🎈 Enviar
+        📩 Enviar
       </button>
     </form>
 
@@ -91,14 +60,14 @@
 
     <hr class="my-6" />
 
-    <button id="adminBtn" class="w-full bg-gray-600 text-white p-2 rounded-md hover:bg-gray-700 transition">🔑 Acceso administrador</button>
+    <button id="adminBtn" class="w-full bg-gray-700 text-white p-2 rounded-md hover:bg-gray-800 transition">🔐 Acceso administrador</button>
 
     <div id="adminPanel" class="mt-4 hidden">
       <input type="password" id="adminClave" placeholder="Clave de acceso" class="w-full p-2 border rounded-md mb-2"/>
-      <button id="verRespuestas" class="w-full bg-green-600 text-white p-2 rounded-md hover:bg-green-700 transition">Ver respuestas</button>
+      <button id="verRespuestas" class="w-full bg-green-600 text-white p-2 rounded-md hover:bg-green-700 transition">📊 Ver respuestas</button>
 
       <div id="tablaRespuestas" class="mt-4 hidden">
-        <h3 class="text-xl font-bold text-center mb-2">📋 Respuestas registradas</h3>
+        <h3 class="text-xl font-bold text-center mb-2">📋 Respuestas de Estudiantes</h3>
         <div class="overflow-x-auto">
           <table class="w-full border border-gray-300 text-sm">
             <thead class="bg-blue-100">
@@ -107,8 +76,8 @@
                 <th class="border p-1">Edad</th>
                 <th class="border p-1">Curso</th>
                 <th class="border p-1">Emoción</th>
-                <th class="border p-1">Ganas de faltar</th>
-                <th class="border p-1">Acompañado/a</th>
+                <th class="border p-1">Faltas</th>
+                <th class="border p-1">Acompañado</th>
               </tr>
             </thead>
             <tbody id="tabla" class="text-center"></tbody>
@@ -122,74 +91,83 @@
     </div>
   </div>
 
-  <script>
-    const form = document.getElementById('studentForm');
-    const alerta = document.getElementById('alerta');
-    const adminBtn = document.getElementById('adminBtn');
-    const adminPanel = document.getElementById('adminPanel');
-    const verRespuestasBtn = document.getElementById('verRespuestas');
-    const tabla = document.querySelector('#tabla');
+  <!-- Firebase SDK - compat -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 
-    form.addEventListener('submit', async function (e) {
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyA2QyCQse0v7pHpU9InvGNbzuqsQuHAMHc",
+      authDomain: "contigo-escuela.firebaseapp.com",
+      projectId: "contigo-escuela",
+      storageBucket: "contigo-escuela.firebasestorage.app",
+      messagingSenderId: "76123958946",
+      appId: "1:76123958946:web:98bac656997a4ee23fb1fb",
+      measurementId: "G-LW7CCJW7F8"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    window.db = db;
+
+    const form = document.getElementById("studentForm");
+    const alerta = document.getElementById("alerta");
+    const adminBtn = document.getElementById("adminBtn");
+    const adminPanel = document.getElementById("adminPanel");
+    const verRespuestasBtn = document.getElementById("verRespuestas");
+    const tabla = document.querySelector("#tabla");
+
+    form.addEventListener("submit", function (e) {
       e.preventDefault();
       const data = {
         nombre: form.nombre.value,
-        edad: form.edad.value,
-        curso: form.curso.value,
+        Nombre del hijo o hija: form.Edad.value,
+        Curso del estudiante: form.Curso del estudiante.value,
         emocion: form.emocion.value,
-        ganas: form.ganas.value,
+        falta: form.falta.value,
         acompanado: form.acompanado.value,
         timestamp: new Date()
       };
 
-      try {
-        await db.collection("respuestasEstudiantes").add(data);
-        let necesitaApoyo = data.emocion === 'triste' || data.ganas === 'si' || data.acompanado === 'no';
-
-        alerta.innerHTML = necesitaApoyo
-          ? `<p class="text-red-600">🔔 Atención: El estudiante podría necesitar apoyo emocional.</p>
-             <p class="text-green-600 mt-2">✅ Tu formulario ha sido enviado con éxito.</p>`
-          : `<p class="text-green-600">✅ Gracias por responder. Tu formulario ha sido enviado.</p>`;
-
-        form.reset();
-      } catch (error) {
-        alerta.innerHTML = `<p class="text-red-600">❌ Error al enviar el formulario.</p>`;
-        console.error("Error guardando en Firestore:", error);
-      }
+      db.collection("padres").add(data)
+        .then(() => {
+          alerta.textContent = "✅ Registro enviado con éxito.";
+          form.reset();
+        })
+        .catch((error) => {
+          console.error("❌ Error guardando en Firestore:", error);
+          alerta.textContent = "❌ Error al enviar el formulario.";
+        });
     });
 
-    adminBtn.addEventListener('click', () => {
-      adminPanel.classList.remove('hidden');
+    adminBtn.addEventListener("click", () => {
+      adminPanel.classList.remove("hidden");
     });
 
-    verRespuestasBtn.addEventListener('click', async () => {
-      const clave = document.getElementById('adminClave').value;
-      if (clave !== 'Inacap2025.') {
+    verRespuestasBtn.addEventListener("click", () => {
+      const clave = document.getElementById("adminClave").value;
+      if (clave !== "Inacap2025.") {
         alert("Clave incorrecta");
         return;
       }
 
-      tabla.innerHTML = '';
-      try {
-        const snapshot = await db.collection("respuestasEstudiantes").orderBy("timestamp", "desc").get();
-        snapshot.forEach(doc => {
-          const dato = doc.data();
+      db.collection("padres").get().then((querySnapshot) => {
+        tabla.innerHTML = "";
+        querySnapshot.forEach((doc) => {
+          const d = doc.data();
           const fila = `<tr>
-            <td class="border p-1">${dato.nombre}</td>
-            <td class="border p-1">${dato.edad}</td>
-            <td class="border p-1">${dato.curso}</td>
-            <td class="border p-1">${dato.emocion}</td>
-            <td class="border p-1">${dato.ganas}</td>
-            <td class="border p-1">${dato.acompanado}</td>
+              <td class="border p-1">${d.nombre}</td>
+              <td class="border p-1">${d.Edad}</td>
+              <td class="border p-1">${d.Curso del estudiante}</td>
+              <td class="border p-1">${d.emocion}</td>
+              <td class="border p-1">${d.falta}</td>
+              <td class="border p-1">${d.acompanado}</td>
           </tr>`;
           tabla.innerHTML += fila;
         });
-        document.getElementById('tablaRespuestas').classList.remove('hidden');
-      } catch (error) {
-        alert("❌ Error al obtener respuestas desde Firebase.");
-        console.error("Firestore error:", error);
-      }
+
+        document.getElementById("tablaRespuestas").classList.remove("hidden");
+      });
     });
   </script>
 </body>
-</html>
