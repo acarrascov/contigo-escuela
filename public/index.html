@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contigo Escuela - Estudiantes</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icono.png" type="image/png">
+</head>
+<body class="bg-blue-50 font-sans">
+  <div class="max-w-xl mx-auto mt-10 bg-white shadow-md rounded-2xl p-6">
+    <h1 class="text-3xl font-bold text-center text-blue-600 mb-4">🎒 Contigo Escuela</h1>
+    <p class="text-center text-lg mb-6 font-medium">💬 Encuesta de bienestar estudiantil</p>
+
+    <form id="studentForm" class="space-y-4">
+      <div>
+        <label class="block font-semibold mb-1">👤 Nombre del estudiante:</label>
+        <input type="text" name="nombre" required class="w-full p-2 border rounded-md"/>
+      </div>
+
+      <div>
+        <label class="block font-semibold mb-1">🎂 Edad:</label>
+        <input type="number" name="edad" min="6" max="14" required class="w-full p-2 border rounded-md"/>
+      </div>
+
+      <div>
+        <label class="block font-semibold mb-1">📚 Curso:</label>
+        <input type="text" name="curso" required class="w-full p-2 border rounded-md"/>
+      </div>
+
+      <div>
+        <label class="block font-semibold mb-1">😊 ¿Cómo te sentiste esta semana?</label>
+        <select name="emocion" required class="w-full p-2 border rounded-md">
+          <option value="">Selecciona</option>
+          <option value="feliz">🙂 Bien</option>
+          <option value="neutral">😐 Más o menos</option>
+          <option value="triste">😞 Mal</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block font-semibold mb-1">📅 ¿Has querido faltar al colegio?</label>
+        <select name="ganas" required class="w-full p-2 border rounded-md">
+          <option value="">Selecciona</option>
+          <option value="no">No</option>
+          <option value="a_veces">A veces</option>
+          <option value="si">Sí</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block font-semibold mb-1">🧸 ¿Te sientes acompañado/a?</label>
+        <select name="acompanado" required class="w-full p-2 border rounded-md">
+          <option value="">Selecciona</option>
+          <option value="si">Sí</option>
+          <option value="no">No</option>
+        </select>
+      </div>
+
+      <button type="submit" class="w-full bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700 transition">
+        🎈 Enviar
+      </button>
+    </form>
+
+    <div id="alerta" class="mt-4 text-center text-lg font-semibold"></div>
+
+    <hr class="my-6" />
+
+    <button id="adminBtn" class="w-full bg-gray-600 text-white p-2 rounded-md hover:bg-gray-700 transition">🔑 Acceso administrador</button>
+
+    <div id="adminPanel" class="mt-4 hidden">
+      <input type="password" id="adminClave" placeholder="Clave de acceso" class="w-full p-2 border rounded-md mb-2"/>
+      <button id="verRespuestas" class="w-full bg-green-600 text-white p-2 rounded-md hover:bg-green-700 transition">Ver respuestas</button>
+
+      <div id="tablaRespuestas" class="mt-4 hidden">
+        <h3 class="text-xl font-bold text-center mb-2">📋 Respuestas registradas</h3>
+        <div class="overflow-x-auto">
+          <table class="w-full border border-gray-300 text-sm">
+            <thead class="bg-blue-100">
+              <tr>
+                <th class="border p-1">Nombre</th>
+                <th class="border p-1">Edad</th>
+                <th class="border p-1">Curso</th>
+                <th class="border p-1">Emoción</th>
+                <th class="border p-1">Ganas de faltar</th>
+                <th class="border p-1">Acompañado/a</th>
+              </tr>
+            </thead>
+            <tbody id="tabla" class="text-center"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-6 text-center">
+      <a href="padres.html" class="text-blue-600 underline hover:text-blue-800">👨‍👩‍👧‍👦 Ir al panel de apoderados</a>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('studentForm');
+    const alerta = document.getElementById('alerta');
+    const adminBtn = document.getElementById('adminBtn');
+    const adminPanel = document.getElementById('adminPanel');
+    const verRespuestasBtn = document.getElementById('verRespuestas');
+    const tabla = document.querySelector('#tabla');
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const data = {
+        nombre: form.nombre.value,
+        edad: form.edad.value,
+        curso: form.curso.value,
+        emocion: form.emocion.value,
+        ganas: form.ganas.value,
+        acompanado: form.acompanado.value,
+      };
+
+      let respuestas = JSON.parse(localStorage.getItem("respuestasEstudiantes")) || [];
+      respuestas.push(data);
+      localStorage.setItem("respuestasEstudiantes", JSON.stringify(respuestas));
+
+      let necesitaApoyo = data.emocion === 'triste' || data.ganas === 'si' || data.acompanado === 'no';
+
+      alerta.innerHTML = necesitaApoyo
+        ? `<p class="text-red-600">🔔 Atención: El estudiante podría necesitar apoyo emocional.</p>
+           <p class="text-green-600 mt-2">✅ Tu formulario ha sido enviado con éxito.</p>`
+        : `<p class="text-green-600">✅ Gracias por responder. Tu formulario ha sido enviado.</p>`;
+
+      form.reset();
+    });
+
+    adminBtn.addEventListener('click', () => {
+      adminPanel.classList.remove('hidden');
+    });
+
+    verRespuestasBtn.addEventListener('click', () => {
+      const clave = document.getElementById('adminClave').value;
+      if (clave !== 'Inacap2025.') {
+        alert("Clave incorrecta");
+        return;
+      }
+
+      const datos = JSON.parse(localStorage.getItem("respuestasEstudiantes")) || [];
+      tabla.innerHTML = '';
+      datos.forEach(dato => {
+        const fila = `<tr>
+          <td class="border p-1">${dato.nombre}</td>
+          <td class="border p-1">${dato.edad}</td>
+          <td class="border p-1">${dato.curso}</td>
+          <td class="border p-1">${dato.emocion}</td>
+          <td class="border p-1">${dato.ganas}</td>
+          <td class="border p-1">${dato.acompanado}</td>
+        </tr>`;
+        tabla.innerHTML += fila;
+      });
+
+      document.getElementById('tablaRespuestas').classList.remove('hidden');
+    });
+
+    if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js')
+      .then(() => console.log('✅ Service Worker registrado'))
+      .catch(err => console.error('❌ Error al registrar SW', err));
+  }
+  </script>
+</body>
+</html>

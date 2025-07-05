@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contigo Escuela - Padres</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="bg-yellow-50 font-sans">
+  <div class="max-w-xl mx-auto mt-10 bg-white shadow-md rounded-2xl p-6">
+    <h1 class="text-3xl font-bold text-center text-yellow-600 mb-4">👨‍👩‍👧‍👦 Contigo Escuela - Apoderados</h1>
+    <p class="text-center text-lg mb-6 font-medium">📋 Formulario para padres y apoderados</p>
+
+    <form id="parentForm" class="space-y-4">
+      <div>
+        <label class="block font-semibold mb-1">👤 Nombre del apoderado:</label>
+        <input type="text" name="nombre" required class="w-full p-2 border rounded-md"/>
+      </div>
+
+      <div>
+        <label class="block font-semibold mb-1">📞 ¿Podemos contactarte si es necesario?</label>
+        <select name="contacto" required class="w-full p-2 border rounded-md">
+          <option value="">Selecciona</option>
+          <option value="si">Sí</option>
+          <option value="no">No</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block font-semibold mb-1">📆 ¿Te gustaría participar en actividades escolares?</label>
+        <select name="participa" required class="w-full p-2 border rounded-md">
+          <option value="">Selecciona</option>
+          <option value="si">Sí</option>
+          <option value="no">No</option>
+          <option value="depende">Depende de la actividad</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block font-semibold mb-1">📝 Comentarios u observaciones:</label>
+        <textarea name="comentario" rows="3" class="w-full p-2 border rounded-md"></textarea>
+      </div>
+
+      <button type="submit" class="w-full bg-yellow-600 text-white p-2 rounded-md hover:bg-yellow-700 transition">
+        📨 Enviar
+      </button>
+    </form>
+
+    <div id="alerta" class="mt-4 text-center text-lg font-semibold"></div>
+
+    <hr class="my-6" />
+
+    <button id="adminBtn" class="w-full bg-gray-600 text-white p-2 rounded-md hover:bg-gray-700 transition">🔑 Acceso administrador</button>
+
+    <div id="adminPanel" class="mt-4 hidden">
+      <input type="password" id="adminClave" placeholder="Clave de acceso" class="w-full p-2 border rounded-md mb-2"/>
+      <button id="verRespuestas" class="w-full bg-green-600 text-white p-2 rounded-md hover:bg-green-700 transition">Ver respuestas</button>
+
+      <div id="tablaRespuestas" class="mt-4 hidden">
+        <h3 class="text-xl font-bold text-center mb-2">📋 Respuestas de Apoderados</h3>
+        <div class="overflow-x-auto">
+          <table class="w-full border border-gray-300 text-sm">
+            <thead class="bg-yellow-100">
+              <tr>
+                <th class="border p-1">Nombre</th>
+                <th class="border p-1">Contacto</th>
+                <th class="border p-1">Participación</th>
+                <th class="border p-1">Comentario</th>
+              </tr>
+            </thead>
+            <tbody id="tabla" class="text-center"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-6 text-center">
+      <a href="index.html" class="text-yellow-600 underline hover:text-yellow-800">🎒 Volver al panel de estudiantes</a>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('parentForm');
+    const alerta = document.getElementById('alerta');
+    const adminBtn = document.getElementById('adminBtn');
+    const adminPanel = document.getElementById('adminPanel');
+    const verRespuestasBtn = document.getElementById('verRespuestas');
+    const tabla = document.querySelector('#tabla');
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const data = {
+        nombre: form.nombre.value,
+        contacto: form.contacto.value,
+        participa: form.participa.value,
+        comentario: form.comentario.value
+      };
+
+      let respuestas = JSON.parse(localStorage.getItem("respuestasPadres")) || [];
+      respuestas.push(data);
+      localStorage.setItem("respuestasPadres", JSON.stringify(respuestas));
+
+      alerta.innerHTML = `<p class="text-green-600">✅ ¡Gracias por participar!</p>`;
+      form.reset();
+    });
+
+    adminBtn.addEventListener('click', () => {
+      adminPanel.classList.remove('hidden');
+    });
+
+    verRespuestasBtn.addEventListener('click', () => {
+      const clave = document.getElementById('adminClave').value;
+      if (clave !== 'Inacap2025.') {
+        alert("Clave incorrecta");
+        return;
+      }
+
+      const datos = JSON.parse(localStorage.getItem("respuestasPadres")) || [];
+      tabla.innerHTML = '';
+      datos.forEach(dato => {
+        const fila = `<tr>
+          <td class="border p-1">${dato.nombre}</td>
+          <td class="border p-1">${dato.contacto}</td>
+          <td class="border p-1">${dato.participa}</td>
+          <td class="border p-1">${dato.comentario}</td>
+        </tr>`;
+        tabla.innerHTML += fila;
+      });
+
+      document.getElementById('tablaRespuestas').classList.remove('hidden');
+    });
+  </script>
+</body>
+</html>
