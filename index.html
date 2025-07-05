@@ -4,84 +4,121 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Encuesta Estudiantil</title>
-  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-blue-50 font-sans">
-  <div class="max-w-xl mx-auto mt-10 bg-white shadow-md rounded-2xl p-6">
-    <h1 class="text-2xl font-bold text-center text-blue-600 mb-4">🗣️ Encuesta de bienestar estudiantil</h1>
+<body class="bg-blue-50 flex items-center justify-center min-h-screen">
+  <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+    <h1 class="text-xl font-bold text-center text-blue-700 mb-6">
+      🗣️ Encuesta de bienestar estudiantil
+    </h1>
 
-    <form id="formEstudiante" class="space-y-4">
-      <input name="nombre" placeholder="Nombre del estudiante" required class="w-full p-2 border rounded"/>
-      <input name="edad" placeholder="Edad" required type="number" class="w-full p-2 border rounded"/>
-      <input name="curso" placeholder="Curso" required class="w-full p-2 border rounded"/>
+    <form id="formulario" class="space-y-4">
+      <div>
+        <label class="font-bold">👤 Nombre del estudiante:</label>
+        <input type="text" name="nombre" required class="w-full mt-1 border rounded p-2" />
+      </div>
 
-      <select name="estado" required class="w-full p-2 border rounded">
-        <option value="">¿Cómo te sentiste esta semana?</option>
-        <option value="Bien">😊 Bien</option>
-        <option value="Más o menos">😐 Más o menos</option>
-        <option value="Mal">😞 Mal</option>
-      </select>
+      <div>
+        <label class="font-bold">🎂 Edad:</label>
+        <input type="number" name="edad" required class="w-full mt-1 border rounded p-2" />
+      </div>
 
-      <select name="faltas" required class="w-full p-2 border rounded">
-        <option value="">¿Has querido faltar al colegio?</option>
-        <option value="Sí">Sí</option>
-        <option value="No">No</option>
-      </select>
+      <div>
+        <label class="font-bold">📚 Curso:</label>
+        <input type="text" name="curso" required class="w-full mt-1 border rounded p-2" />
+      </div>
 
-      <select name="acompañamiento" required class="w-full p-2 border rounded">
-        <option value="">¿Te sientes acompañado/a?</option>
-        <option value="Sí">Sí</option>
-        <option value="No">No</option>
-      </select>
+      <div>
+        <label class="font-bold">😊 ¿Cómo te sentiste esta semana?</label>
+        <select name="estado" required class="w-full mt-1 border rounded p-2">
+          <option value="">Selecciona</option>
+          <option value="🙂 Bien">🙂 Bien</option>
+          <option value="😐 Regular">😐 Regular</option>
+          <option value="😔 Mal">😔 Mal</option>
+        </select>
+      </div>
 
-      <button type="submit" class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">📨 Enviar</button>
+      <div>
+        <label class="font-bold">🗓️ ¿Has querido faltar al colegio?</label>
+        <select name="asistencia" required class="w-full mt-1 border rounded p-2">
+          <option value="">Selecciona</option>
+          <option value="No">No</option>
+          <option value="Sí">Sí</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="font-bold">🧑‍🤝‍🧑 ¿Te sientes acompañado/a?</label>
+        <select name="acompanamiento" required class="w-full mt-1 border rounded p-2">
+          <option value="">Selecciona</option>
+          <option value="Sí">Sí</option>
+          <option value="No">No</option>
+        </select>
+      </div>
+
+      <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded">
+        📩 Enviar
+      </button>
     </form>
 
-    <div id="respuesta" class="mt-4 text-center text-green-600 font-bold"></div>
+    <p id="mensaje" class="text-center mt-4 font-semibold"></p>
+
+    <div class="mt-6 text-center">
+      <a href="padres.html" class="block bg-gray-700 hover:bg-gray-800 text-white py-2 rounded">
+        🔑 Acceso administrador
+      </a>
+    </div>
   </div>
 
-  <!-- Firebase Compat Scripts -->
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 
   <script>
-    // Configuración de Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyA2QyCQse0v7pHpU9InvGNbzuqsQuHAMHc",
       authDomain: "contigo-escuela.firebaseapp.com",
       projectId: "contigo-escuela",
-      storageBucket: "contigo-escuela.appspot.com",
+      storageBucket: "contigo-escuela.firebasestorage.app",
       messagingSenderId: "76123958946",
       appId: "1:76123958946:web:98bac656997a4ee23fb1fb",
       measurementId: "G-LW7CCJW7F8"
     };
 
-    // Inicializar Firebase y Firestore
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    // Manejo del formulario
-    const form = document.getElementById('formEstudiante');
-    const respuesta = document.getElementById('respuesta');
-
-    form.addEventListener('submit', async (e) => {
+    document.getElementById("formulario").addEventListener("submit", async (e) => {
       e.preventDefault();
+
+      const nombre = e.target.nombre.value;
+      const edad = e.target.edad.value;
+      const curso = e.target.curso.value;
+      const estado = e.target.estado.value;
+      const asistencia = e.target.asistencia.value;
+      const acompanamiento = e.target.acompanamiento.value;
+
       const data = {
-        nombre: form.nombre.value,
-        edad: form.edad.value,
-        curso: form.curso.value,
-        estado: form.estado.value,
-        faltas: form.faltas.value,
-        acompañamiento: form.acompañamiento.value
+        nombre,
+        edad,
+        curso,
+        estado,
+        asistencia,
+        acompanamiento,
+        fecha: new Date().toISOString()
       };
+
+      const mensaje = document.getElementById("mensaje");
 
       try {
         await db.collection("respuestasEstudiantes").add(data);
-        respuesta.textContent = "✅ ¡Respuesta enviada correctamente!";
-        form.reset();
+        mensaje.textContent = "✅ ¡Respuesta enviada correctamente!";
+        mensaje.className = "text-green-600 text-center mt-4 font-semibold";
+        e.target.reset();
       } catch (error) {
-        console.error("Error al guardar en Firestore:", error);
-        respuesta.textContent = "❌ Error al enviar el formulario.";
+        console.error("Error guardando en Firestore:", error);
+        mensaje.textContent = "❌ Error al enviar el formulario.";
+        mensaje.className = "text-red-600 text-center mt-4 font-semibold";
       }
     });
   </script>
