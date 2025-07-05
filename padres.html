@@ -16,6 +16,15 @@
         <label class="block font-semibold mb-1">👤 Nombre del apoderado:</label>
         <input type="text" name="nombre" required class="w-full p-2 border rounded-md"/>
       </div>
+        <div>
+    <label class="block font-semibold mb-1">👧 Nombre del hijo o hija:</label>
+    <input type="text" name="hijo" required class="w-full p-2 border rounded-md"/>
+  </div>
+
+  <div>
+    <label class="block font-semibold mb-1">📚 Curso del estudiante:</label>
+    <input type="text" name="curso" required class="w-full p-2 border rounded-md"/>
+  </div>
 
       <div>
         <label class="block font-semibold mb-1">📞 ¿Podemos contactarte si es necesario?</label>
@@ -62,7 +71,9 @@
           <table class="w-full border border-gray-300 text-sm">
             <thead class="bg-yellow-100">
               <tr>
-                <th class="border p-1">Nombre</th>
+                <th class="border p-1">Apoderado</th>
+                <th class="border p-1">Hijo/a</th>
+                <th class="border p-1">Curso</th>
                 <th class="border p-1">Contacto</th>
                 <th class="border p-1">Participación</th>
                 <th class="border p-1">Comentario</th>
@@ -91,6 +102,8 @@
       e.preventDefault();
       const data = {
         nombre: form.nombre.value,
+        hijo: form.hijo.value,
+        curso: form.curso.value,
         contacto: form.contacto.value,
         participa: form.participa.value,
         comentario: form.comentario.value
@@ -119,10 +132,12 @@
       tabla.innerHTML = '';
       datos.forEach(dato => {
         const fila = `<tr>
-          <td class="border p-1">${dato.nombre}</td>
-          <td class="border p-1">${dato.contacto}</td>
-          <td class="border p-1">${dato.participa}</td>
-          <td class="border p-1">${dato.comentario}</td>
+            <td class="border p-1">${dato.nombre}</td>
+            <td class="border p-1">${dato.hijo}</td>
+            <td class="border p-1">${dato.curso}</td>
+            <td class="border p-1">${dato.contacto}</td>
+            <td class="border p-1">${dato.participa}</td>
+            <td class="border p-1">${dato.comentario}</td>
         </tr>`;
         tabla.innerHTML += fila;
       });
