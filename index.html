@@ -3,176 +3,87 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Contigo Escuela - Estudiantes</title>
+  <title>Encuesta Estudiantil</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body class="bg-blue-50 font-sans">
   <div class="max-w-xl mx-auto mt-10 bg-white shadow-md rounded-2xl p-6">
-    <h1 class="text-3xl font-bold text-center text-blue-600 mb-4">💬 Formulario para padres y apoderados</h1>
+    <h1 class="text-2xl font-bold text-center text-blue-600 mb-4">🗣️ Encuesta de bienestar estudiantil</h1>
 
-    <form id="studentForm" class="space-y-4">
-      <div>
-        <label class="block font-semibold mb-1">👤 Nombre del apoderado:</label>
-        <input type="text" name="nombre" required class="w-full p-2 border rounded-md"/>
-      </div>
-      <div>
-        <label class="block font-semibold mb-1">🎂 Nombre del hijo o hija:</label>
-        <input type="number" name="Edad" required class="w-full p-2 border rounded-md"/>
-      </div>
-      <div>
-        <label class="block font-semibold mb-1">📚 Curso:</label>
-        <input type="text" name="Curso del estudiante" required class="w-full p-2 border rounded-md"/>
-      </div>
-      <div>
-        <label class="block font-semibold mb-1">😊 ¿Cómo te sentiste esta semana?</label>
-        <select name="emocion" required class="w-full p-2 border rounded-md">
-          <option value="">Selecciona</option>
-          <option value="bien">😊 Bien</option>
-          <option value="maso">😐 Más o menos</option>
-          <option value="mal">😔 Mal</option>
-        </select>
-      </div>
-      <div>
-        <label class="block font-semibold mb-1">📅 ¿Te gustaría participar en actividades escolares?</label>
-        <select name="falta" required class="w-full p-2 border rounded-md">
-          <option value="">Selecciona</option>
-          <option value="no">No</option>
-          <option value="una">Una vez</option>
-          <option value="varias">Varias veces</option>
-        </select>
-      </div>
-      <div>
-        <label class="block font-semibold mb-1">🧑‍🤝‍🧑 Comentarios u observaciones:</label>
-        <select name="acompanado" required class="w-full p-2 border rounded-md">
-          <option value="">Selecciona</option>
-          <option value="si">Sí</option>
-          <option value="no">No</option>
-          <option value="a_veces">A veces</option>
-        </select>
-      </div>
+    <form id="formEstudiante" class="space-y-4">
+      <input name="nombre" placeholder="Nombre del estudiante" required class="w-full p-2 border rounded"/>
+      <input name="edad" placeholder="Edad" required type="number" class="w-full p-2 border rounded"/>
+      <input name="curso" placeholder="Curso" required class="w-full p-2 border rounded"/>
 
-      <button type="submit" class="w-full bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700 transition">
-        📩 Enviar
-      </button>
+      <select name="estado" required class="w-full p-2 border rounded">
+        <option value="">¿Cómo te sentiste esta semana?</option>
+        <option value="Bien">😊 Bien</option>
+        <option value="Más o menos">😐 Más o menos</option>
+        <option value="Mal">😞 Mal</option>
+      </select>
+
+      <select name="faltas" required class="w-full p-2 border rounded">
+        <option value="">¿Has querido faltar al colegio?</option>
+        <option value="Sí">Sí</option>
+        <option value="No">No</option>
+      </select>
+
+      <select name="acompañamiento" required class="w-full p-2 border rounded">
+        <option value="">¿Te sientes acompañado/a?</option>
+        <option value="Sí">Sí</option>
+        <option value="No">No</option>
+      </select>
+
+      <button type="submit" class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">📨 Enviar</button>
     </form>
 
-    <div id="alerta" class="mt-4 text-center text-lg font-semibold"></div>
-
-    <hr class="my-6" />
-
-    <button id="adminBtn" class="w-full bg-gray-700 text-white p-2 rounded-md hover:bg-gray-800 transition">🔐 Acceso administrador</button>
-
-    <div id="adminPanel" class="mt-4 hidden">
-      <input type="password" id="adminClave" placeholder="Clave de acceso" class="w-full p-2 border rounded-md mb-2"/>
-      <button id="verRespuestas" class="w-full bg-green-600 text-white p-2 rounded-md hover:bg-green-700 transition">📊 Ver respuestas</button>
-
-      <div id="tablaRespuestas" class="mt-4 hidden">
-        <h3 class="text-xl font-bold text-center mb-2">📋 Respuestas de Estudiantes</h3>
-        <div class="overflow-x-auto">
-          <table class="w-full border border-gray-300 text-sm">
-            <thead class="bg-blue-100">
-              <tr>
-                <th class="border p-1">Nombre</th>
-                <th class="border p-1">Edad</th>
-                <th class="border p-1">Curso</th>
-                <th class="border p-1">Emoción</th>
-                <th class="border p-1">Faltas</th>
-                <th class="border p-1">Acompañado</th>
-              </tr>
-            </thead>
-            <tbody id="tabla" class="text-center"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <div class="mt-6 text-center">
-      <a href="padres.html" class="text-blue-600 underline hover:text-blue-800">👨‍👩‍👧‍👦 Ir al panel de apoderados</a>
-    </div>
+    <div id="respuesta" class="mt-4 text-center text-green-600 font-bold"></div>
   </div>
 
-  <!-- Firebase SDK - compat -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <!-- Firebase Compat Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
-<script>
-  // Configuración de tu Firebase
-  const firebaseConfig = {
-    apiKey: "AIzaSyA2QyCQse0v7pHpU9InvGNbzuqsQuHAMHc",
-    authDomain: "contigo-escuela.firebaseapp.com",
-    projectId: "contigo-escuela",
-    storageBucket: "contigo-escuela.appspot.com",
-    messagingSenderId: "76123958946",
-    appId: "1:76123958946:web:98bac656997a4ee23fb1fb",
-    measurementId: "G-LW7CCJW7F8"
-  };
+  <script>
+    // Configuración de Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyA2QyCQse0v7pHpU9InvGNbzuqsQuHAMHc",
+      authDomain: "contigo-escuela.firebaseapp.com",
+      projectId: "contigo-escuela",
+      storageBucket: "contigo-escuela.appspot.com",
+      messagingSenderId: "76123958946",
+      appId: "1:76123958946:web:98bac656997a4ee23fb1fb",
+      measurementId: "G-LW7CCJW7F8"
+    };
 
-  // Inicializar Firebase
-  firebase.initializeApp(firebaseConfig);
+    // Inicializar Firebase y Firestore
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
 
-  // Inicializar Firestore
-  const db = firebase.firestore();
+    // Manejo del formulario
+    const form = document.getElementById('formEstudiante');
+    const respuesta = document.getElementById('respuesta');
 
-    window.bd = db
-    
-    const form = document.getElementById("studentForm");
-    const alerta = document.getElementById("alerta");
-    const adminBtn = document.getElementById("adminBtn");
-    const adminPanel = document.getElementById("adminPanel");
-    const verRespuestasBtn = document.getElementById("verRespuestas");
-    const tabla = document.querySelector("#tabla");
-
-    form.addEventListener("submit", function (e) {
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const data = {
         nombre: form.nombre.value,
-        Nombre del hijo o hija: form.Edad.value,
-        Curso del estudiante: form.Curso del estudiante.value,
-        emocion: form.emocion.value,
-        falta: form.falta.value,
-        acompanado: form.acompanado.value,
-        timestamp: new Date()
+        edad: form.edad.value,
+        curso: form.curso.value,
+        estado: form.estado.value,
+        faltas: form.faltas.value,
+        acompañamiento: form.acompañamiento.value
       };
 
-      db.collection("padres").add(data)
-        .then(() => {
-          alerta.textContent = "✅ Registro enviado con éxito.";
-          form.reset();
-        })
-        .catch((error) => {
-          console.error("❌ Error guardando en Firestore:", error);
-          alerta.textContent = "❌ Error al enviar el formulario.";
-        });
-    });
-
-    adminBtn.addEventListener("click", () => {
-      adminPanel.classList.remove("hidden");
-    });
-
-    verRespuestasBtn.addEventListener("click", () => {
-      const clave = document.getElementById("adminClave").value;
-      if (clave !== "Inacap2025.") {
-        alert("Clave incorrecta");
-        return;
+      try {
+        await db.collection("respuestasEstudiantes").add(data);
+        respuesta.textContent = "✅ ¡Respuesta enviada correctamente!";
+        form.reset();
+      } catch (error) {
+        console.error("Error al guardar en Firestore:", error);
+        respuesta.textContent = "❌ Error al enviar el formulario.";
       }
-
-      db.collection("padres").get().then((querySnapshot) => {
-        tabla.innerHTML = "";
-        querySnapshot.forEach((doc) => {
-          const d = doc.data();
-          const fila = `<tr>
-              <td class="border p-1">${d.nombre}</td>
-              <td class="border p-1">${d.Edad}</td>
-              <td class="border p-1">${d.Curso del estudiante}</td>
-              <td class="border p-1">${d.emocion}</td>
-              <td class="border p-1">${d.falta}</td>
-              <td class="border p-1">${d.acompanado}</td>
-          </tr>`;
-          tabla.innerHTML += fila;
-        });
-
-        document.getElementById("tablaRespuestas").classList.remove("hidden");
-      });
     });
   </script>
 </body>
+</html>
