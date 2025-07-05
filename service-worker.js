@@ -1,18 +1,32 @@
+const CACHE_NAME = "contigo-escuela-v1";
+const urlsToCache = [
+  "index.html",
+  "padres.html",
+  "style.css",
+  "icono.png"
+];
+
+// Instalación: guardar archivos en caché
 self.addEventListener("install", event => {
   event.waitUntil(
-    caches.open("contigo-v1").then(cache => {
-      return cache.addAll([
-        "./",
-        "./index.html",
-        "./padres.html",
-        "./public/style.css",
-        "./script.js",
-        "./icono.png"
-      ]);
+    caches.open(CACHE_NAME).then(cache => {
+      return cache.addAll(urlsToCache);
     })
   );
 });
 
+// Activación: limpiar caché anterior si existe
+self.addEventListener("activate", event => {
+  event.waitUntil(
+    caches.keys().then(keys => {
+      return Promise.all(
+        keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))
+      );
+    })
+  );
+});
+
+// Intercepción de peticiones
 self.addEventListener("fetch", event => {
   event.respondWith(
     caches.match(event.request).then(response => {
