@@ -108,6 +108,8 @@
 
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
+
+    window.bd = db
     
     const form = document.getElementById("studentForm");
     const alerta = document.getElementById("alerta");
