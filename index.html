@@ -90,19 +90,6 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    // Mostrar advertencia si el estado es "😔 Mal"
-    document.querySelector('select[name="estado"]').addEventListener("change", (e) => {
-      const advertencia = document.getElementById("advertencia");
-      if (e.target.value === "😔 Mal") {
-        advertencia.textContent =
-          "⚠️ Hemos registrado que no te sentiste bien esta semana. Esta información será enviada al equipo correspondiente para apoyarte.";
-        advertencia.classList.remove("hidden");
-      } else {
-        advertencia.textContent = "";
-        advertencia.classList.add("hidden");
-      }
-    });
-
     // Envío de formulario
     document.getElementById("formulario").addEventListener("submit", async (e) => {
   e.preventDefault();
