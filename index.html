@@ -123,43 +123,6 @@
         mensaje.className = "text-red-600 text-center mt-4 font-semibold";
       }
     });
-
-    // Mostrar panel admin
-    document.getElementById("adminBtn").addEventListener("click", () => {
-      document.getElementById("adminPanel").classList.remove("hidden");
-    });
-
-    // Ver respuestas
-    document.getElementById("verRespuestas").addEventListener("click", async () => {
-      const clave = document.getElementById("claveAdmin").value;
-      if (clave !== "Inacap2025.") {
-        alert("Clave incorrecta");
-        return;
-      }
-
-      const tabla = document.getElementById("tablaRespuestas");
-      tabla.innerHTML = "";
-
-      try {
-        const snapshot = await db.collection("respuestasEstudiantes").orderBy("fecha", "desc").get();
-        snapshot.forEach(doc => {
-          const d = doc.data();
-          tabla.innerHTML += `
-            <tr>
-              <td class="border p-1">${d.nombre}</td>
-              <td class="border p-1">${d.edad}</td>
-              <td class="border p-1">${d.curso}</td>
-              <td class="border p-1">${d.estado}</td>
-              <td class="border p-1">${d.asistencia}</td>
-              <td class="border p-1">${d.acompanamiento}</td>
-            </tr>`;
-        });
-        document.getElementById("tablaPanel").classList.remove("hidden");
-      } catch (error) {
-        console.error("Error obteniendo datos:", error);
-        alert("❌ Error al obtener datos.");
-      }
-    });
   </script>
 </body>
 </html>
