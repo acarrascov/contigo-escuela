@@ -70,6 +70,7 @@
     </div>
 
     <p id="mensaje" class="text-center mt-4 font-semibold"></p>
+    <p id="advertencia" class="text-center mt-4 font-semibold text-yellow-600 hidden"></p>
 
   <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
@@ -122,6 +123,17 @@
         mensaje.textContent = "❌ Error al enviar el formulario.";
         mensaje.className = "text-red-600 text-center mt-4 font-semibold";
       }
+      // Mostrar advertencia si el estado es "😔 Mal"
+      document.querySelector('select[name="estado"]').addEventListener("change", (e) => {
+        const advertencia = document.getElementById("advertencia");
+        if (e.target.value === "😔 Mal") {
+        advertencia.textContent = "⚠️ Hemos registrado que no te sentiste bien esta semana. Esta información será enviada al equipo correspondiente para apoyarte.";
+        advertencia.classList.remove("hidden");
+          } else {
+          advertencia.textContent = "";
+          advertencia.classList.add("hidden");
+          }
+});
     });
   </script>
 </body>
