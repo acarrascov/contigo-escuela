@@ -64,35 +64,7 @@
     </div>
 
     <p id="mensaje" class="text-center mt-4 font-semibold"></p>
-
-    <div class="mt-6 text-center">
-      <button id="mostrarAdmin" class="bg-gray-700 hover:bg-gray-800 text-white py-2 px-4 rounded">
-        🔑 Acceso administrador
-      </button>
-    </div>
-
-    <div id="adminPanel" class="mt-6 hidden">
-      <input type="password" id="claveAdmin" placeholder="Ingrese clave" class="w-full p-2 border rounded mb-2">
-      <button id="verRespuestas" class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700">Ver respuestas</button>
-
-      <div id="tablaRespuestas" class="mt-4 hidden overflow-auto text-sm">
-        <table class="w-full border text-center">
-          <thead class="bg-yellow-100">
-            <tr>
-              <th class="border p-1">Apoderado</th>
-              <th class="border p-1">Hijo/a</th>
-              <th class="border p-1">Curso</th>
-              <th class="border p-1">Contacto</th>
-              <th class="border p-1">Participa</th>
-              <th class="border p-1">Comentario</th>
-            </tr>
-          </thead>
-          <tbody id="tablaPadres"></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
+ 
   <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
