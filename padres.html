@@ -113,37 +113,7 @@
       }
     });
 
-    document.getElementById("mostrarAdmin").addEventListener("click", () => {
-      adminPanel.classList.remove("hidden");
-    });
-
-    document.getElementById("verRespuestas").addEventListener("click", async () => {
-      const clave = document.getElementById("claveAdmin").value;
-      if (clave !== "Inacap2025.") {
-        alert("❌ Clave incorrecta");
-        return;
-      }
-
-      tabla.innerHTML = "";
-      try {
-        const snapshot = await db.collection("respuestasPadres").orderBy("fecha", "desc").get();
-        snapshot.forEach(doc => {
-          const dato = doc.data();
-          const fila = `<tr>
-            <td class="border p-1">${dato.apoderado}</td>
-            <td class="border p-1">${dato.hijo}</td>
-            <td class="border p-1">${dato.curso}</td>
-            <td class="border p-1">${dato.contacto}</td>
-            <td class="border p-1">${dato.participa}</td>
-            <td class="border p-1">${dato.comentario}</td>
-          </tr>`;
-          tabla.innerHTML += fila;
-        });
-        document.getElementById("tablaRespuestas").classList.remove("hidden");
-      } catch (error) {
-        alert("❌ Error al obtener datos.");
-        console.error(error);
-      }
+       }
     });
   </script>
 </body>
