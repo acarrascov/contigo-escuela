@@ -76,7 +76,7 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 
-  <script>
+    <script>
     const firebaseConfig = {
       apiKey: "AIzaSyA2QyCQse0v7pHpU9InvGNbzuqsQuHAMHc",
       authDomain: "contigo-escuela.firebaseapp.com",
@@ -89,6 +89,19 @@
 
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
+
+    // Mostrar advertencia si el estado es "😔 Mal"
+    document.querySelector('select[name="estado"]').addEventListener("change", (e) => {
+      const advertencia = document.getElementById("advertencia");
+      if (e.target.value === "😔 Mal") {
+        advertencia.textContent =
+          "⚠️ Hemos registrado que no te sentiste bien esta semana. Esta información será enviada al equipo correspondiente para apoyarte.";
+        advertencia.classList.remove("hidden");
+      } else {
+        advertencia.textContent = "";
+        advertencia.classList.add("hidden");
+      }
+    });
 
     // Envío de formulario
     document.getElementById("formulario").addEventListener("submit", async (e) => {
@@ -118,22 +131,13 @@
         mensaje.textContent = "✅ ¡Respuesta enviada correctamente!";
         mensaje.className = "text-green-600 text-center mt-4 font-semibold";
         e.target.reset();
+        // También ocultamos la advertencia si estaba visible
+        document.getElementById("advertencia").classList.add("hidden");
       } catch (error) {
         console.error("Error guardando en Firestore:", error);
         mensaje.textContent = "❌ Error al enviar el formulario.";
         mensaje.className = "text-red-600 text-center mt-4 font-semibold";
       }
-      // Mostrar advertencia si el estado es "😔 Mal"
-      document.querySelector('select[name="estado"]').addEventListener("change", (e) => {
-        const advertencia = document.getElementById("advertencia");
-        if (e.target.value === "😔 Mal") {
-        advertencia.textContent = "⚠️ Hemos registrado que no te sentiste bien esta semana. Esta información será enviada al equipo correspondiente para apoyarte.";
-        advertencia.classList.remove("hidden");
-          } else {
-          advertencia.textContent = "";
-          advertencia.classList.add("hidden");
-          }
-});
     });
   </script>
 </body>
