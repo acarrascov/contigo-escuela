@@ -119,7 +119,7 @@
     mensaje.textContent = "✅ ¡Respuesta enviada correctamente!";
     mensaje.className = "text-green-600 text-center mt-4 font-semibold";
 
-    if (estado === "😔 Mal") {
+    if (estado === "😔 Mal"|| asistencia === "Sí" || acompanamiento === "No") {
       advertencia.textContent =
         "⚠️ Hemos registrado que no te sentiste bien esta semana. Esta información será enviada al equipo correspondiente para apoyarte.";
       advertencia.classList.remove("hidden");
