@@ -105,40 +105,51 @@
 
     // Envío de formulario
     document.getElementById("formulario").addEventListener("submit", async (e) => {
-      e.preventDefault();
+  e.preventDefault();
 
-      const nombre = e.target.nombre.value;
-      const edad = e.target.edad.value;
-      const curso = e.target.curso.value;
-      const estado = e.target.estado.value;
-      const asistencia = e.target.asistencia.value;
-      const acompanamiento = e.target.acompanamiento.value;
+  const nombre = e.target.nombre.value;
+  const edad = e.target.edad.value;
+  const curso = e.target.curso.value;
+  const estado = e.target.estado.value;
+  const asistencia = e.target.asistencia.value;
+  const acompanamiento = e.target.acompanamiento.value;
 
-      const data = {
-        nombre,
-        edad,
-        curso,
-        estado,
-        asistencia,
-        acompanamiento,
-        fecha: new Date().toISOString()
-      };
+  const data = {
+    nombre,
+    edad,
+    curso,
+    estado,
+    asistencia,
+    acompanamiento,
+    fecha: new Date().toISOString()
+  };
 
-      const mensaje = document.getElementById("mensaje");
+  const mensaje = document.getElementById("mensaje");
+  const advertencia = document.getElementById("advertencia");
 
-      try {
-        await db.collection("respuestasEstudiantes").add(data);
-        mensaje.textContent = "✅ ¡Respuesta enviada correctamente!";
-        mensaje.className = "text-green-600 text-center mt-4 font-semibold";
-        e.target.reset();
-        // También ocultamos la advertencia si estaba visible
-        document.getElementById("advertencia").classList.add("hidden");
-      } catch (error) {
-        console.error("Error guardando en Firestore:", error);
-        mensaje.textContent = "❌ Error al enviar el formulario.";
-        mensaje.className = "text-red-600 text-center mt-4 font-semibold";
-      }
-    });
+  try {
+    await db.collection("respuestasEstudiantes").add(data);
+    mensaje.textContent = "✅ ¡Respuesta enviada correctamente!";
+    mensaje.className = "text-green-600 text-center mt-4 font-semibold";
+
+    if (estado === "😔 Mal") {
+      advertencia.textContent =
+        "⚠️ Hemos registrado que no te sentiste bien esta semana. Esta información será enviada al equipo correspondiente para apoyarte.";
+      advertencia.classList.remove("hidden");
+    } else {
+      advertencia.textContent = "";
+      advertencia.classList.add("hidden");
+    }
+
+    e.target.reset();
+  } catch (error) {
+    console.error("Error guardando en Firestore:", error);
+    mensaje.textContent = "❌ Error al enviar el formulario.";
+    mensaje.className = "text-red-600 text-center mt-4 font-semibold";
+    advertencia.textContent = "";
+    advertencia.classList.add("hidden");
+  }
+});
   </script>
 </body>
 </html>
